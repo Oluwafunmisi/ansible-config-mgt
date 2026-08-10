@@ -10,27 +10,10 @@ pipeline {
     }
 
     stages {
-
-        stage('Clean Workspace') {
-            steps {
-                deleteDir()
-            }
-        }
-
-        stage('Checkout SCM') {
-            steps {
-                git branch: 'main',
-                    url: 'git@github.com:Oluwafunmisi/ansible-config-mgt.git'
-            }
-        }
-
         stage('Configure Ansible') {
             steps {
                 sh '''
                     sed -i "s|roles_path = .*|roles_path = ${WORKSPACE}/roles|" ${WORKSPACE}/deploy/.ansible.cfg
-
-                    echo "ANSIBLE_CONFIG=${WORKSPACE}/deploy/.ansible.cfg"
-                    echo "roles_path=${WORKSPACE}/roles"
                 '''
             }
         }
@@ -39,11 +22,7 @@ pipeline {
             steps {
                 sh '''
                     export ANSIBLE_CONFIG=${WORKSPACE}/deploy/.ansible.cfg
-
-                    ansible-playbook \
-                        -i inventory/${inventory}.yml \
-                        playbooks/site.yml \
-                        -e "env=${inventory}"
+                    ansible-playbook -i inventory/${inventory}.yml playbooks/site.yml -e "env=${inventory}"
                 '''
             }
         }
