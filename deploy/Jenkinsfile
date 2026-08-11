@@ -22,7 +22,7 @@ pipeline {
             steps {
                 sh '''
                     export ANSIBLE_CONFIG=${WORKSPACE}/deploy/.ansible.cfg
-                    ansible-playbook -i inventory/${inventory}.yml playbooks/site.yml -e "env=${inventory}"
+                    ansible-playbook -i inventory/${inventory}.yml playbooks/site.yml -e env=${inventory}
                 '''
             }
         }
