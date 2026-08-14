@@ -7,6 +7,12 @@ pipeline {
             defaultValue: 'dev',
             description: 'This is the inventory file for the environment to deploy configuration'
         )
+
+        string(
+            name: 'ansible_tags',
+            defaultValue: 'webserver',
+            description: 'Ansible tags to run specific roles or tasks'
+        )
     }
 
     stages {
@@ -33,6 +39,7 @@ pipeline {
                         ansible-playbook \
                           -i inventory/${inventory}.yml \
                           playbooks/site.yml \
+                          --tags "${ansible_tags}" \
                           -e env=${inventory} \
                           -e ansible_user=${SSH_USER} \
                           -e ansible_ssh_private_key_file=${SSH_KEY}

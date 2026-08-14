@@ -1,4 +1,7 @@
+
 - hosts: webservers
   become: yes
   roles:
-    - webserver
+    - role: webserver
+      tags:
+        - webserver
